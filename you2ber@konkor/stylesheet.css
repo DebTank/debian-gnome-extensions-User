@@ -1,0 +1,24 @@
+.y2b-menu {
+    min-width: 320px;
+}
+
+.y2b-item {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.audio-button, .video-button {
+    font-weight: bold;
+    border-radius: 0;
+    padding: 6px;
+}
+.audio-button:hover, .audio-button:focus {
+    color: #323843;
+    background-color: #93e600;
+    border: none;
+}
+.video-button:hover, .video-button:focus {
+    color: #323843;
+    background-color: #1c99d5;
+    border: none;
+}

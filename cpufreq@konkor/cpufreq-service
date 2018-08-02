@@ -1,0 +1,233 @@
+#!/usr/bin/gjs
+/*
+ * CPUFreq Manager - a lightweight CPU frequency scaling monitor
+ * and powerful CPU management tool
+ *
+ * Author (C) 2016-2018 konkor <kapa76@gmail.com>
+ *
+ * This file is part of CPUFreq Manager.
+ *
+ * CPUFreq Manager is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CPUFreq Manager is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
+const Lang = imports.lang;
+const System = imports.system;
+
+const APPDIR = get_appdir ();
+imports.searchPath.unshift(APPDIR);
+
+const Convenience = imports.convenience;
+
+const MONITOR_KEY = 'monitor';
+
+var DEBUGING = false;
+let settings = null;
+let monitor_timeout = 500;
+
+let streams = [];
+let freqs = [];
+let cpucount = 1;
+let gcc = 0;
+
+let event = 0;
+let init_event = 0;
+
+const OBJECT_PATH = '/org/konkor/cpufreq/service';
+const CpufreqServiceIface = '<node> \
+<interface name="org.konkor.cpufreq.service"> \
+<property name="Frequency" type="t" access="read"/> \
+<signal name="FrequencyChanged"> \
+  <arg name="title" type="s"/> \
+</signal> \
+</interface> \
+</node>';
+const CpufreqServiceInfo  = Gio.DBusInterfaceInfo.new_for_xml (CpufreqServiceIface);
+
+var CpufreqService = new Lang.Class ({
+    Name: 'CpufreqService',
+    Extends: Gio.Application,
+
+    _init: function (args) {
+        GLib.set_prgname ("cpufreq-service");
+        this.parent ({
+            application_id: "org.konkor.cpufreq.service",
+            flags: Gio.ApplicationFlags.IS_SERVICE
+        });
+        GLib.set_application_name ("CPUFreq Service");
+        monitor_timeout = settings.get_int (MONITOR_KEY);
+    },
+
+    vfunc_startup: function() {
+        this.parent();
+        this.init ();
+        this.hold ();
+    },
+
+    vfunc_activate: function() {
+        this.connect("destroy", () => {
+            this.remove_events ();
+        });
+    },
+
+    init: function() {
+        debug ("init");
+        this.dbus = Gio.DBusExportedObject.wrapJSObject (CpufreqServiceInfo, this);
+        this.dbus.export (Gio.DBus.session, OBJECT_PATH);
+        cpucount = Convenience.get_cpu_number ();
+        this.max0 = 0;
+        this.title = "-- \u3393";
+        this.old = this.title;
+        freqs = [GLib.get_num_processors ()];
+        this._init_streams ();
+        this._update_freq ();
+        this._add_event ();
+        settings.connect ("changed::" + MONITOR_KEY, Lang.bind (this, function() {
+            monitor_timeout = settings.get_int (MONITOR_KEY);
+            this._add_event ();
+        }));
+    },
+
+     _add_event: function () {
+        if (event != 0) {
+            GLib.Source.remove (event);
+            event = 0;
+        }
+        if (monitor_timeout > 0)
+            event = GLib.timeout_add (100, monitor_timeout, Lang.bind (this, function () {
+                this._update_freq ();
+                return true;
+            }));
+        else this.quit ();
+    },
+
+    _init_streams: function() {
+        debug ("init_streams");
+        if (init_event != 0) {
+            GLib.Source.remove (init_event);
+            init_event = 0;
+        }
+        streams.forEach (stream => {
+            try {
+                if (stream) stream.close (null);
+            } catch (e) {}
+        });
+        streams = [];
+        for (let key = 0; key < cpucount; key++) {
+            if (GLib.file_test ('/sys/devices/system/cpu/cpu' + key + '/topology', GLib.FileTest.EXISTS)) {
+                let f = Gio.File.new_for_path ('/sys/devices/system/cpu/cpu' + key + '/cpufreq/scaling_cur_freq');
+                streams.push (new Gio.DataInputStream({ base_stream: f.read(null) }));
+            } else {
+                streams.push (null);
+            }
+        }
+    },
+
+    _update_freq: function () {
+        let m = 0;
+        streams.forEach (stream => {
+            this._read_line (stream);
+        });
+        for (let i = 0; i < cpucount; i++)
+            if (i < freqs.length && freqs[i] > m) m = freqs[i];
+        if (m > 0 && m != this.max0) {
+            if (m >= 1000000) {
+                this.title = (m/1000000).toFixed(2).toString() + " \u3393";
+            } else {
+                this.title = (m/1000).toFixed(0).toString() + "  \u3392";
+            }
+            this.dbus.emit_signal ("FrequencyChanged", new GLib.Variant("(s)", [this.title]));
+            this.old = this.title;
+            this.max0 = m;
+            gcc++;
+            if (gcc == 10) {
+                gcc = 0;
+                System.gc ();
+            }
+        }
+        //debug (this.title);
+    },
+
+    _read_line: function (dis) {
+        if (dis == null) return;
+        try {
+            dis.seek (0, GLib.SeekType.SET, null);
+            dis.read_line_async (200, null, this._read_done);
+        } catch (e) {
+            init_event = GLib.timeout_add (0, 25, Lang.bind (this, this._init_streams ));
+            //error (e);
+        }
+    },
+
+    _read_done: function (stream, res) {
+        try {
+            let [line,] = stream.read_line_finish (res);
+            if (line) {
+                var n = parseInt (line);
+                if (Number.isInteger (n)) {
+                    freqs.unshift (n);
+                    freqs.splice (freqs.length-1, 1);
+                }
+            }
+        } catch (e) {}
+    },
+
+    remove_events: function () {
+        if (event != 0) GLib.Source.remove (event);
+        if (init_event != 0) GLib.Source.remove (init_event);
+        event = 0; init_event = 0;
+        if (this.dbus) this.dbus.unexport ();
+    }
+});
+
+function getCurrentFile () {
+    let stack = (new Error()).stack;
+    let stackLine = stack.split('\n')[1];
+    if (!stackLine)
+        throw new Error ('Could not find current file');
+    let match = new RegExp ('@(.+):\\d+').exec(stackLine);
+    if (!match)
+        throw new Error ('Could not find current file');
+    let path = match[1];
+    let file = Gio.File.new_for_path (path);
+    return [file.get_path(), file.get_parent().get_path(), file.get_basename()];
+}
+
+function get_appdir () {
+    let s = getCurrentFile ()[1];
+    if (GLib.file_test (s + "/extension.js", GLib.FileTest.EXISTS)) return s;
+    s = GLib.get_home_dir () + "/.local/share/gnome-shell/extensions/cpufreq@konkor";
+    if (GLib.file_test (s + "/extension.js", GLib.FileTest.EXISTS)) return s;
+    s = "/usr/share/gnome-shell/extensions/cpufreq@konkor";
+    if (GLib.file_test (s + "/extension.js", GLib.FileTest.EXISTS)) return s;
+    throw "Installation not found...";
+    return s;
+}
+
+function debug (msg) {
+    if (msg && DEBUGING) print ("[cpufreq][service] " + msg);
+}
+
+function error (msg) {
+    print ("[cpufreq][service] (EE) " + msg);
+}
+
+settings = Convenience.getSettings ();
+try {
+    let app = new CpufreqService (ARGV);
+    app.run (ARGV);
+} catch (e) {
+    print (e.message);
+}

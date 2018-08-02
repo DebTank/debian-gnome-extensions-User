@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="org-konkor-you2ber">
+
+  <schema id="org.konkor.you2ber" path="/org/konkor/you2ber/">
+
+    <key type="b" name="debug">
+      <default>false</default>
+      <summary>>Debugging</summary>
+      <description>Enable DEBUG messages</description>
+    </key>
+
+    <key type="s" name="audio-folder">
+        <default>''</default>
+        <summary>Audio Folder</summary>
+        <description>Folder to store audio content</description>
+    </key>
+
+    <key type="s" name="video-folder">
+        <default>''</default>
+        <summary>Video Folder</summary>
+        <description>Folder to store video content</description>
+    </key>
+
+    <key type="b" name="playlists">
+      <default>false</default>
+      <summary>>Playlists</summary>
+      <description>Enable/Disable playlists (default - disabled)</description>
+    </key>
+
+  </schema>
+</schemalist>

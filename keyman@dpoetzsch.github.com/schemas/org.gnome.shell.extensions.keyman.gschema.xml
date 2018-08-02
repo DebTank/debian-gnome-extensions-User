@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+
+  <schema path="/org/gnome/shell/extensions/keyman/" id="org.gnome.shell.extensions.keyman">
+
+    <key type="as" name="open-keyman-menu-keybinding">
+        <default><![CDATA[['<Super>K']]]></default>
+        <summary>The key to open the keyman shell menu</summary>
+    </key>
+
+    <key type="b" name="primary-clipboard">
+        <default>false</default>
+        <summary>If true, the primary clipboard (mousekey 3) is used instead of the default clipboard (Strg+V)</summary>
+        <!--<description></description>-->
+    </key>
+
+    <key type="i" name="clipboard-duration">
+        <default>5000</default>
+        <summary>The amount of time a secret stays in the clipboard in miliseconds.</summary>
+        <!--<description></description>-->
+    </key>
+
+    <key type="i" name="history-size">
+        <default>5</default>
+        <summary>The maximum size of items stored in the history of copied secrets.</summary>
+        <!--<description></description>-->
+    </key>
+
+  </schema>
+</schemalist>

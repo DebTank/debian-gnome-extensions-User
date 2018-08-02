@@ -1,0 +1,105 @@
+<schemalist gettext-domain="gnome-shell-extensions">
+
+  <enum id="org.gnome.shell.extensions.googleearthwallpaper.LinkProviderEnum">
+    <value value="0" nick="google-earth"/>
+    <value value="1" nick="google-maps"/>
+    <value value="2" nick="bing-maps"/>
+    <value value="3" nick="openstreetmap"/>
+    <value value="4" nick="gnome-maps"/>
+  </enum>
+
+  <schema id="org.gnome.shell.extensions.googleearthwallpaper"
+      path="/org/gnome/shell/extensions/googleearthwallpaper/">
+
+    <key name="hide" type="b">
+      <default>false</default>
+        <summary>Hide indicator</summary>
+        <description>Hide indicator icon from status area</description>
+    </key>
+
+    <key name="notify" type="b">
+      <default>true</default>
+        <summary>Send a notifications</summary>
+        <description>Send a notification with explanation when the picture of the day is downloaded</description>
+    </key>
+
+    <key name="transient" type="b">
+      <default>true</default>
+        <summary>Use transient notifications (auto dismiss)</summary>
+        <description></description>
+    </key>
+
+    <key name="set-background" type="b">
+      <default>true</default>
+        <summary>Set desktop background</summary>
+        <description>Set desktop background</description>
+    </key>
+
+    <key name="set-lock-screen" type="b">
+      <default>true</default>
+        <summary>Set lock screen background</summary>
+        <description>Set lock screen background</description>
+    </key>
+
+    <key name="download-folder" type="s">
+      <default>""</default>
+      <summary>Where to download pictures.</summary>
+      <description></description>
+    </key>
+
+    <key name="debug-logging" type="b">
+      <default>true</default>
+        <summary>Log messages to systemd journal</summary>
+        <description>Unlikely to be useful for ordinary users, but helpful for debugging</description>
+    </key>
+
+    <key name="delete-previous" type="b">
+      <default>true</default>
+        <summary>Delete previous wallpapers</summary>
+        <description>Save disk space</description>
+    </key>
+
+    <key name="image-filepath" type="s">
+      <default>""</default>
+        <summary>Current filepath</summary>
+        <description></description>
+    </key>
+
+    <key name="refresh-interval" type="i">
+      <default>86400</default>
+      <summary>Number of seconds to between refreshes</summary>
+      <description></description>
+    </key>
+
+    <key name="image-id" type="i">
+      <default>0</default>
+      <summary>Current image id</summary>
+      <description></description>
+    </key>
+
+    <key name="image-details" type="s">
+      <default>""</default>
+      <summary>Description|Attribution</summary>
+      <description></description>
+    </key>
+
+    <key name="next-refresh" type="i">
+      <default>0</default>
+      <summary>Next refresh due, seconds since Epoch</summary>
+      <description></description>
+    </key>
+
+    <key name="map-link-provider" enum="org.gnome.shell.extensions.googleearthwallpaper.LinkProviderEnum">
+      <default>'google-maps'</default>
+      <summary>Provider used to view wallpaper location and context</summary>
+      <description></description>
+    </key>
+
+    <key name="brightness" type="i">
+      <default>80</default>
+      <summary>Percentage brightness change for indicator icon</summary>
+      <description></description>
+    </key>
+
+  </schema>
+</schemalist>
