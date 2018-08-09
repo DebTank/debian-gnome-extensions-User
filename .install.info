@@ -1,0 +1,49 @@
+[Info] System-wide Gnome Extensions
+/usr/share/gnome-shell/extensions/
+total 48
+drwxr-xr-x 2 tender root 4096 Aug  2 12:02 auto-move-windows@gnome-shell-extensions.gcampax.github.com
+drwxr-xr-x 2 tender root 4096 Aug  2 12:02 drive-menu@gnome-shell-extensions.gcampax.github.com
+drwxr-xr-x 2 tender root 4096 Aug  2 12:02 launch-new-instance@gnome-shell-extensions.gcampax.github.com
+-rwxrwxrwx 1 tender root  888 Aug  1 11:41 mover
+drwxr-xr-x 2 tender root 4096 Aug  2 12:02 native-window-placement@gnome-shell-extensions.gcampax.github.com
+drwxr-xr-x 2 tender root 4096 Aug  2 12:02 places-menu@gnome-shell-extensions.gcampax.github.com
+-rw------- 1 tender root  110 Aug  2 12:35 README.md
+drwxr-xr-x 2 tender root 4096 Aug  2 12:02 screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com
+drwxr-xr-x 2 root   root 4096 Aug  9 12:08 TopIcons@phocean.net
+drwxr-xr-x 2 tender root 4096 Aug  2 12:02 user-theme@gnome-shell-extensions.gcampax.github.com
+drwxr-xr-x 2 tender root 4096 Aug  2 12:02 window-list@gnome-shell-extensions.gcampax.github.com
+drwxr-xr-x 2 tender root 4096 Aug  2 12:02 windowsNavigator@gnome-shell-extensions.gcampax.github.com
+[Info] User-wide Gnome Extensions
+/home/tender/.local/share/gnome-shell/extensions/
+total 124
+drwx------ 3 tender tender 4096 Aug  3 10:33 android-tool@naman14.github.com
+drwx------ 3 tender tender 4096 Aug  3 11:04 apps-menu@gnome-shell-extensions.gcampax.github.com
+drwx------ 4 tender tender 4096 Aug  1 12:26 auto-move-windows@gnome-shell-extensions.gcampax.github.com
+drwx------ 3 tender tender 4096 Aug  3 10:12 cpufreq@konkor
+drwxr-xr-x 5 tender tender 4096 Jul 30 11:33 dash-to-panel@jderose9.github.com
+drwx------ 3 tender tender 4096 Aug  2 12:09 drive-menu@gnome-shell-extensions.gcampax.github.com
+drwx------ 5 tender tender 4096 Aug  1 15:34 EasyScreenCast@iacopodeenosee.gmail.com
+drwx------ 2 tender tender 4096 Jul 31 20:14 fix-multi-monitors@kirby_33@hotmail.fr
+drwx------ 3 tender tender 4096 Aug  1 11:50 gnome-kinit@bonzini.gnu.org
+drwx------ 5 tender tender 4096 Aug  2 12:23 GoogleEarthWallpaper@neffo.github.com
+drwx------ 6 tender tender 4096 Jul 31 20:33 gsconnect@andyholmes.github.io
+drwx------ 2 tender tender 4096 Aug  3 10:34 instant-switcher-popups@christopher.luebbemeier.gmail.com
+drwx------ 4 tender tender 4096 Aug  1 15:51 keyman@dpoetzsch.github.com
+drwx------ 2 tender tender 4096 Aug  2 12:42 launch-new-instance@gnome-shell-extensions.gcampax.github.com
+drwxr-xr-x 3 tender tender 4096 Aug  9 12:07 native-window-placement@gnome-shell-extensions.gcampax.github.com
+drwx------ 4 tender tender 4096 Aug  3 10:44 netspeed@hedayaty.gmail.com
+-rw------- 1 tender tender  109 Aug  2 12:33 README.md
+drwx------ 2 tender tender 4096 Aug  1 15:29 refresh-wifi@kgshank.net
+drwx------ 3 tender tender 4096 Aug  2 12:09 screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com
+drwx------ 5 tender tender 4096 Aug  2 12:22 show-desktop@l300lvl.tk
+drwxr-xr-x 5 tender tender 4096 Jul 30 11:42 sound-output-device-chooser@kgshank.net
+drwx------ 5 tender tender 4096 Aug  1 15:26 TeaTime@oleid.mescharet.de
+drwx------ 5 tender tender 4096 Aug  2 12:49 TopIcons@phocean.net
+drwx------ 3 tender tender 4096 Aug  2 12:09 user-theme@gnome-shell-extensions.gcampax.github.com
+drwx------ 4 tender tender 4096 Aug  1 12:30 window-list@gnome-shell-extensions.gcampax.github.com
+drwxr-xr-x 4 tender tender 4096 Jul 30 11:54 windows-blur-effects@com.gmail.lviggiani
+drwx------ 3 tender tender 4096 Aug  1 12:30 windowsNavigator@gnome-shell-extensions.gcampax.github.com
+drwx------ 3 tender tender 4096 Aug  3 10:55 workspace-bar@markbokil.com
+drwx------ 3 tender tender 4096 Aug  3 10:52 workspace-grid@mathematical.coffee.gmail.com
+drwx------ 4 tender tender 4096 Aug  3 10:44 you2ber@konkor
+drwx------ 6 tender tender 4096 Jul 31 19:58 youtube-search-provider@atareao.es
